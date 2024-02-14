@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: vote
+  name: vote-dp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: vote
+  template:
+    metadata:
+      labels:
+        app: vote
+    spec:
+      containers:
+        - name: vote
+          image: dockersamples/examplevotingapp_vote
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 200m
+              memory: 600Mi
+            limits:
+              cpu: 4000m
+              memory: 800Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: vote
+  name: vote-server
+spec:
+  type: NodePort
+  ports:
+    - name: vote
+      port: 5000
+      targetPort: 80
+      nodePort: 31000
+  selector:
+    app: vote

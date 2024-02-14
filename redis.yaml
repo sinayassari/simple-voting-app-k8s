@@ -22,7 +22,6 @@ spec:
     matchLabels:
       app: redis
   replicas: 2
-  serviceName: redis-service
   template:
     metadata:
       labels:
