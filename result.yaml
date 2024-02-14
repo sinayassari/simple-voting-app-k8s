@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: result-dp
+  labels:
+    app: result
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: result
+  template:
+    metadata:
+      labels:
+        app: result
+    spec:
+      containers:
+        - name: result
+          image: dockersamples/examplevotingapp_result
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 200m
+              memory: 400Mi
+            limits:
+              cpu: 400m
+              memory: 800Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: result-server
+spec:
+  type: NodePort
+  selector:
+    app: result
+  ports:
+    - name: "result-service"
+      port: 5001
+      targetPort: 80
+      nodePort: 31001
